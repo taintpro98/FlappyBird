@@ -17,11 +17,13 @@ public class FlappyBird extends GameScreen{
 	private BufferedImage birds;
 //	private BufferedImage chimney;
 	private Animation bird_anim;
-	public static float g = 0.1f;
+	public static float g = 0.15f;
 	private Bird bird;
 	private Ground ground;
 //	private Chimney cnObject;
 	private ChimneyGroup chimneyGroup;
+	
+	private int Point = 0;
 	
 	private int BEGIN_SCREEN = 0;
 	private int GAMEPLAY_SCREEN = 1;
@@ -32,7 +34,7 @@ public class FlappyBird extends GameScreen{
 		super(800, 600);
 		
 		try {
-			birds = ImageIO.read(new File("///home/batman/eclipse-workspace/JavaApplication/assets/bird_sprite.png"));
+			birds = ImageIO.read(new File("///home/batman/eclipse-workspace/FlappyBird/assets/bird_sprite.png"));
 			
 //			chimney = ImageIO.read(new File("///home/batman/eclipse-workspace/JavaApplication/assets/chimney.png"));
 
@@ -65,6 +67,9 @@ public class FlappyBird extends GameScreen{
 	private void resetGame() {
 		bird.setPos(350, 250);
 		bird.setVt(0);
+		bird.setLive(true);
+		Point = 0;
+		chimneyGroup.resetChimneys();
 	}
 
 	@Override
@@ -75,10 +80,25 @@ public class FlappyBird extends GameScreen{
 			resetGame();
 		} else if(CurrentScreen == GAMEPLAY_SCREEN) {
 
-			bird_anim.Update_Me(deltaTime);
+			
+			if(bird.getLive()) bird_anim.Update_Me(deltaTime);
 			bird.update(deltaTime);
 			ground.Update();
 			chimneyGroup.update();
+			
+			for(int i=0; i<ChimneyGroup.SIZE; i++) {
+				if(bird.getRect().intersects(chimneyGroup.getChimney(i).getRect()))
+					bird.setLive(false);
+			}
+			
+			for(int i=0; i<ChimneyGroup.SIZE; i++) {
+				if(bird.getPosX() > chimneyGroup.getChimney(i).getPosX() && !chimneyGroup.getChimney(i).getIsBehindBird() && i%2==0) {
+					Point++;
+					bird.getMoneySound.play();
+					chimneyGroup.getChimney(i).setIsBehindBird(true);
+				}
+			}
+			
 			if(bird.getPosY() + bird.getH() > ground.getYGround()) {
 				CurrentScreen = GAMEOVER_SCREEN;
 			}
@@ -95,6 +115,9 @@ public class FlappyBird extends GameScreen{
 		// TODO Auto-generated method stub
 //		g2.setColor(Color.blue);
 //		g2.fillRect(69, 69, 69, 69);
+		
+		g2.setColor(Color.decode("#d8baef"));
+		g2.fillRect(0, 0, MASTER_WIDTH, MASTER_HEIGHT);
 		
 		chimneyGroup.paint(g2);
 		ground.Paint(g2);
@@ -113,6 +136,9 @@ public class FlappyBird extends GameScreen{
 			g2.drawString("Press space to turn back begin screen", 200, 300);
 		}
 		
+		g2.setColor(Color.red);
+		g2.drawString("Point: "+ Point, 20, 50);
+		
 	}
 
 	@Override
@@ -122,7 +148,7 @@ public class FlappyBird extends GameScreen{
 			if(CurrentScreen == BEGIN_SCREEN) {
 				CurrentScreen = GAMEPLAY_SCREEN;
 			} else if(CurrentScreen == GAMEPLAY_SCREEN) {
-				bird.fly();
+				if(bird.getLive()) bird.fly();
 			} else if(CurrentScreen == GAMEOVER_SCREEN){
 				CurrentScreen = BEGIN_SCREEN;
 			}

@@ -15,7 +15,7 @@ public class Ground {
 	public Ground() {
 		
 		try {
-			groundImage = ImageIO.read(new File("///home/batman/eclipse-workspace/JavaApplication/assets/ground.png"));
+			groundImage = ImageIO.read(new File("///home/batman/eclipse-workspace/FlappyBird/assets/ground.png"));
 
 		} catch (IOException ex) {}
 		

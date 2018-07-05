@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -15,25 +16,56 @@ public class ChimneyGroup {
 	private BufferedImage chimneyImage;
 	private BufferedImage chimneyImage2;
 	
+	public static int SIZE = 6;
+	
+	private int topChimneyY = -250;
+	private int bottomChimneyY = 300;
+	
+	public Chimney getChimney (int i) {
+		return chimneys.get(i);
+	}
+	
+	public int getRandomY() {
+		Random random = new Random();
+		int a = random.nextInt(50);
+		return a;
+	}
+	
 	public ChimneyGroup() {
 		
 		try {
 			
-			chimneyImage = ImageIO.read(new File("///home/batman/eclipse-workspace/JavaApplication/assets/chimney.png"));
-			chimneyImage2 = ImageIO.read(new File("///home/batman/eclipse-workspace/JavaApplication/assets/chimney_.png"));
+			chimneyImage = ImageIO.read(new File("///home/batman/eclipse-workspace/FlappyBird/assets/chimney.png"));
+			chimneyImage2 = ImageIO.read(new File("////home/batman/eclipse-workspace/FlappyBird/assets/chimney_.png"));
 
 		} catch (IOException ex) {}
 		
 		chimneys = new QueueList<Chimney>();
 		Chimney cn;
 		
-		for(int i=0; i<3; i++) {
-			cn = new Chimney(830+i*300,350,74,400);
+		for(int i=0; i<SIZE/2; i++) {
+			
+			int deltaY = getRandomY();
+			
+			cn = new Chimney(830+i*300, bottomChimneyY + deltaY,74,400);
 			chimneys.push(cn);
-			cn = new Chimney(830+i*300,-300,74,400);
+			cn = new Chimney(830+i*300, topChimneyY + deltaY,74,400);
 			chimneys.push(cn);
 		}
 	}
+	
+	public void resetChimneys() {
+		chimneys = new QueueList<Chimney>();
+		Chimney cn;	
+		
+		for(int i=0; i<SIZE/2; i++) {
+			int deltaY = getRandomY();
+			cn = new Chimney(830+i*300, bottomChimneyY + deltaY,74,400);
+			chimneys.push(cn);
+			cn = new Chimney(830+i*300, topChimneyY + deltaY,74,400);
+			chimneys.push(cn);
+		}
+	} 
 	
 	public void update() {
 		for(int i=0; i<6; i++) {
@@ -41,12 +73,18 @@ public class ChimneyGroup {
 			
 		}
 		if(chimneys.get(0).getPosX()<-74) {
+			
+			int deltaY = getRandomY();
 			Chimney cn;
 			cn = chimneys.pop();
 			cn.setPosX(chimneys.get(4).getPosX()+300);
+			cn.setPosY(bottomChimneyY + deltaY);
+			cn.setIsBehindBird(false);
 			chimneys.push(cn);
 			cn = chimneys.pop();
 			cn.setPosX(chimneys.get(4).getPosX());
+			cn.setPosY(topChimneyY + deltaY);
+			cn.setIsBehindBird(false);
 			chimneys.push(cn);
 		}
 	}

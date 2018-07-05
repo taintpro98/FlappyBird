@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author phamn
+ * @author batman
  */
 public abstract class GameScreen extends JFrame implements KeyListener{
 
