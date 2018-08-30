@@ -34,7 +34,7 @@ public class FlappyBird extends GameScreen{
 		super(800, 600);
 		
 		try {
-			birds = ImageIO.read(new File("///home/batman/eclipse-workspace/FlappyBird/assets/bird_sprite.png"));
+			birds = ImageIO.read(new File("assets/bird_sprite.png"));
 			
 //			chimney = ImageIO.read(new File("///home/batman/eclipse-workspace/JavaApplication/assets/chimney.png"));
 
@@ -82,7 +82,7 @@ public class FlappyBird extends GameScreen{
 
 			
 			if(bird.getLive()) bird_anim.Update_Me(deltaTime);
-			bird.update(deltaTime);
+			bird.update();
 			ground.Update();
 			chimneyGroup.update();
 			

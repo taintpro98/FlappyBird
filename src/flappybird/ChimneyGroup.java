@@ -27,16 +27,16 @@ public class ChimneyGroup {
 	
 	public int getRandomY() {
 		Random random = new Random();
-		int a = random.nextInt(50);
-		return a;
+		int a = random.nextInt(10);
+		return a*35-150;
 	}
 	
 	public ChimneyGroup() {
 		
 		try {
 			
-			chimneyImage = ImageIO.read(new File("///home/batman/eclipse-workspace/FlappyBird/assets/chimney.png"));
-			chimneyImage2 = ImageIO.read(new File("////home/batman/eclipse-workspace/FlappyBird/assets/chimney_.png"));
+			chimneyImage = ImageIO.read(new File("assets/chimney.png"));
+			chimneyImage2 = ImageIO.read(new File("assets/chimney_.png"));
 
 		} catch (IOException ex) {}
 		
@@ -60,9 +60,9 @@ public class ChimneyGroup {
 		
 		for(int i=0; i<SIZE/2; i++) {
 			int deltaY = getRandomY();
-			cn = new Chimney(830+i*300, bottomChimneyY + deltaY,74,400);
+			cn = new Chimney(830+i*300, bottomChimneyY + deltaY, 74, 400);
 			chimneys.push(cn);
-			cn = new Chimney(830+i*300, topChimneyY + deltaY,74,400);
+			cn = new Chimney(830+i*300, topChimneyY + deltaY, 74, 400);
 			chimneys.push(cn);
 		}
 	} 

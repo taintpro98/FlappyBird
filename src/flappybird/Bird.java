@@ -44,7 +44,7 @@ public class Bird extends Objects{
 		this.vt = vt;
 	}
 	
-	public void update(long deltaTime) {
+	public void update() {
 		vt += FlappyBird.g;
 		this.setPosY(this.getPosY()+vt);
 		
